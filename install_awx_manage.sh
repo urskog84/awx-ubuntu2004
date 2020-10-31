@@ -54,9 +54,12 @@ fi
 [ ! -d /var/lib/pgdocker ] && sudo mkdir /var/lib/pgdocker
 
 # Open firewall ports 80 and 443
-sudo ufw allow http
-sudo ufw allow https
-
+if [[ $(sudo ufw status | grep Status) = *active* ]]; then
+    sudo ufw status | grep Status
+    sudo ufw allow ssh
+    sudo ufw allow http
+    sudo ufw allow https
+fi
 
 # Start AWX install
 sudo ansible-playbook -i $pwd/awx/installer/inventory $pwd/awx/installer/install.yml
